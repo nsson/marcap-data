@@ -33,15 +33,15 @@ response = requests.post(url, data=data, headers = header)
 stock_data = response.json()['OutBlock_1']
 st = pd.DataFrame(stock_data)
 
-if st['Close'][0] == '-' and st['Close'][1] == '-':
-    exit()
-
 st.rename(
     columns={'ISU_SRT_CD': 'Code', 'ISU_ABBRV': 'Name', 'MKT_NM': 'Market', 'SECT_TP_NM': 'Dept',
              'TDD_CLSPRC':'Close', 'FLUC_TP_CD':'ChangeCode', 'CMPPREVDD_PRC':'Changes', 'FLUC_RT':'ChagesRatio' ,
              'TDD_OPNPRC':'Open', 'TDD_HGPRC':'High','TDD_LWPRC':'Low','ACC_TRDVOL':'Volume','ACC_TRDVAL':'Amount',
              'MKTCAP':'Marcap','LIST_SHRS':'Stocks', 'MKT_ID':'MarketId'},
     inplace=True)  # 거래대금 기준
+
+if st['Close'][0] == '-' and st['Close'][1] == '-':
+    exit()
 
 if 'ISU_CD' in st.columns:
     del(st['ISU_CD'])
@@ -57,5 +57,9 @@ if os.path.exists(filename):
     new_df = pd.concat([old_df, st], ignore_index=True)
 else:
     new_df = st
+
+new_df['ChangeCode']=new_df['ChangeCode'].astype('str')
+new_df['Changes']=new_df['Changes'].astype('str')
+new_df['ChagesRatio']=new_df['ChagesRatio'].astype('str')
 
 new_df.to_parquet(filename, index=False)
