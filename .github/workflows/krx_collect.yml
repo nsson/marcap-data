@@ -27,3 +27,14 @@ jobs:
     - name: Run KRX stock crawler
       run: |
         python krx_collect.py
+
+    - name: Set up Git user
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push changes
+      run: |
+        git add data/marcap-*.parquet
+        git commit -m "Auto-update marcap parquet file"
+        git push
