@@ -1,0 +1,4 @@
+# 이 프로젝트에서만 가상환경을 프로젝트 폴더(.venv)에 생성
+# Cursor/VS Code의 python.defaultInterpreterPath가 .venv를 참조하므로 필요함
+[virtualenvs]
+in-project = true
